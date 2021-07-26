@@ -9,7 +9,7 @@ class Note implements DatabaseModel {
   String id = '';
   String title = '';
   String description = '';
-  // final DateTime? dateTime;
+  DateTime dateTime = DateTime.now();
   List<String> category = [];
   bool isFavorite = false;
 
@@ -17,18 +17,20 @@ class Note implements DatabaseModel {
     required this.id,
     required this.title,
     required this.description,
-    // @required this.dateTime,
+    required this.dateTime,
     required this.category,
     required this.isFavorite,
   });
 
   Note.fromMap(Map<String, dynamic> map) {
-    log(map['category']);
-    List<String> data = List<String>.from(json.decode(map['category']));
+    DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(map['datetime']);
+    List<String> categoryFromJson =
+        List<String>.from(json.decode(map['category']));
     this.id = map['id'];
     this.title = map['title'];
     this.description = map['body'];
-    this.category = data;
+    this.dateTime = dateTime;
+    this.category = categoryFromJson;
     this.isFavorite = map['isFavorite'] == 0 ? false : true;
   }
 
@@ -49,10 +51,12 @@ class Note implements DatabaseModel {
 
   @override
   Map<String, dynamic>? toMap() {
+    int storedDateTime = this.dateTime.millisecondsSinceEpoch;
     return {
       'id': this.id,
       'title': this.title,
       'body': this.description,
+      'datetime': storedDateTime,
       'category': json.encode(this.category),
       'isFavorite': isFavorite ? 1 : 0,
     };

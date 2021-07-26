@@ -87,6 +87,11 @@ class NotesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Note getNoteById(String id) {
+    Note getNote = _allNotes.firstWhere((element) => element.id == id);
+    return getNote;
+  }
+
   void addNote(Note note) async {
     _allNotes.add(note);
     await myDatabase.noteDatabase();
@@ -94,10 +99,13 @@ class NotesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void editNote(Note note, int index) async {
+  void editNote(Note note, String id) async {
+    Note fN = _allNotes.firstWhere((element) => element.id == id);
+    int index = _allNotes.indexOf(fN);
     _allNotes[index] = note;
     await myDatabase.noteDatabase();
     myDatabase.update(note);
+    showCurrent();
     notifyListeners();
   }
 
@@ -110,10 +118,13 @@ class NotesProvider extends ChangeNotifier {
       specificNote.category.add(category.name);
     }
     await myDatabase.update(specificNote);
+    showCurrent();
     notifyListeners();
   }
 
-  void toggleFavorite(int index) async {
+  void toggleFavorite(String id) async {
+    Note fN = _allNotes.firstWhere((element) => element.id == id);
+    int index = _allNotes.indexOf(fN);
     _allNotes[index].isFavorite = !_allNotes[index].isFavorite;
     await myDatabase.noteDatabase();
     myDatabase.update(_allNotes[index]);

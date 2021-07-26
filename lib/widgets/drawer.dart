@@ -19,7 +19,7 @@ class DrawerList extends StatelessWidget {
             child: Consumer(
               builder: (context, watch, child) => ListTile(
                 tileColor: watch(notesChangeNotifierProvider).selected == 'all'
-                    ? Colors.grey
+                    ? Colors.blueGrey
                     : Theme.of(context).canvasColor,
                 leading: const Icon(Icons.note),
                 title: const Text(
@@ -40,7 +40,7 @@ class DrawerList extends StatelessWidget {
           Consumer(
             builder: (context, watch, child) => ListTile(
               tileColor: watch(notesChangeNotifierProvider).selected == 'fav'
-                  ? Colors.grey
+                  ? Colors.blueGrey
                   : Theme.of(context).canvasColor,
               leading: const Icon(Icons.favorite),
               title: const Text(

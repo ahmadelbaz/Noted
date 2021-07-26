@@ -99,7 +99,8 @@ class NotesListScreen extends ConsumerWidget {
                                 ),
                                 trailing: IconButton(
                                   onPressed: () {
-                                    _notesProvider.toggleFavorite(index);
+                                    _notesProvider.toggleFavorite(
+                                        _notesProvider.showedNotes[index].id);
                                   },
                                   icon: Icon(
                                     _notesProvider.showedNotes[index].isFavorite
@@ -109,16 +110,9 @@ class NotesListScreen extends ConsumerWidget {
                                 ),
                                 onTap: () {
                                   // navigate to edit the note
-                                  // log('this is title ${_notesProvider.notes[index].title}\n and this is desc ${_notesProvider.notes[index].description}');
-                                  // log('this is when we travel ${_notesProvider.notes[index].isFavorite}');
                                   Navigator.of(context).pushNamed('edit_screen',
                                       arguments:
-                                          // we want to change it to the index only, so we use future builder there
-                                          // to get data of that index
-                                          // _notesProvider.notes[index].title,
-                                          // _notesProvider.notes[index].description,
-                                          // _notesProvider.notes[index].isFavorite,
-                                          index);
+                                          _notesProvider.showedNotes[index].id);
                                 },
                                 onLongPress: () {
                                   showDialog(
@@ -166,15 +160,23 @@ class NotesListScreen extends ConsumerWidget {
       floatingActionButton: FloatingActionButton(
         child: const Text('+'),
         onPressed: () {
-          Note nN = Note(
+          // _notesProvider.showAllNotes();
+          Note newNote = Note(
               id: generateRandomNum(),
               title: '',
               description: '',
-              category: [],
+              category: _notesProvider.selected != 'all' &&
+                      _notesProvider.selected != 'fav'
+                  ? ['${_notesProvider.selected}']
+                  : [],
+              dateTime: DateTime.now(),
               isFavorite: false); //, isFavorite: false
-          _notesProvider.addNote(nN);
+          _notesProvider.addNote(newNote);
           Navigator.of(context).pushNamed('edit_screen',
-              arguments: _notesProvider.showedNotes.length - 1);
+              // arguments: _notesProvider.allNotes.isEmpty
+              //     ? 0
+              //     : _notesProvider.allNotes.length - 1);
+              arguments: newNote.id); //_notesProvider.allNotes.last.id
         },
       ),
     );

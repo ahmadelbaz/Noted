@@ -23,7 +23,7 @@ class MyDatabase extends ChangeNotifier {
         // Run the CREATE TABLE statement on the database.
         notifyListeners();
         return db.execute(
-          "CREATE TABLE notes(id TEXT PRIMARY KEY, title TEXT, body Text, isFavorite INTEGER, category JSON)", //
+          "CREATE TABLE notes(id TEXT PRIMARY KEY, title TEXT, body Text, isFavorite INTEGER, datetime INTEGER, category JSON)", //
         );
       },
       version: 1,
@@ -72,13 +72,11 @@ class MyDatabase extends ChangeNotifier {
       model.toMap()!,
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-    log('added to database');
     // db.close();
   }
 
   Future<void> update(DatabaseModel model) async {
     final db = await getDatabase(model);
-    log('this is note we want to store ${model.getId()}');
     db.update(
       model.table()!,
       model.toMap()!,
@@ -86,7 +84,6 @@ class MyDatabase extends ChangeNotifier {
       whereArgs: [model.getId()],
     );
     notifyListeners();
-    log('note updated in database');
     // db.close();
   }
 
@@ -97,15 +94,12 @@ class MyDatabase extends ChangeNotifier {
       where: 'id = ?',
       whereArgs: [model.getId()],
     );
-    log('deleted from database');
     // db.close();
   }
 
   Future<List<DatabaseModel>> getAll(String table, String db_name) async {
     final db = await getDatabaseByName(db_name);
     final List<Map<String, dynamic>> maps = await db.query(table);
-    log('this is dataase we chose $db_name');
-    log('this is the map $maps');
     List<Note> notesModels = [];
     List<Category> categoriesModels = [];
     for (var item in maps) {

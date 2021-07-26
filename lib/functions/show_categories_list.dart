@@ -29,7 +29,7 @@ class ShowCategoriesList extends StatelessWidget {
                     return ListTile(
                       tileColor: _notesProvider.selected ==
                               '${_categoriesProvider.categories[index].name}'
-                          ? Colors.grey
+                          ? Colors.blueGrey
                           : Theme.of(context).canvasColor,
                       title:
                           Text('${_categoriesProvider.categories[index].name}'),
