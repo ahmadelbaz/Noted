@@ -39,7 +39,6 @@ class CategoryProvider extends ChangeNotifier {
     await myDatabase.noteDatabase();
     _categories = await myDatabase.getAll('categories', 'categories_database')
         as List<Category>;
-    log('this is all cats we got $_categories');
     if (!_categories.isEmpty) {}
     notifyListeners();
   }
