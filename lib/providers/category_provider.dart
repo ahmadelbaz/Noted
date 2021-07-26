@@ -1,10 +1,8 @@
 import 'dart:collection';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:noted/database/database.dart';
 import 'package:noted/models/category.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class CategoryProvider extends ChangeNotifier {
   List<Category> _categories = [];

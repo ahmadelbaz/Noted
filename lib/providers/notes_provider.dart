@@ -139,11 +139,21 @@ class NotesProvider extends ChangeNotifier {
     _allNotes.removeWhere((element) => element.id == id);
     await myDatabase.noteDatabase();
     await myDatabase.delete(deletedNote);
+    showCurrent();
     notifyListeners();
   }
 
   void deleteAllNotes() {
     _allNotes.clear();
+    notifyListeners();
+  }
+
+  void shareNote(BuildContext context, String id) {
+    Note shareNote = _allNotes.firstWhere((element) => element.id == id);
+    final RenderBox box = context.findRenderObject() as RenderBox;
+    Share.share(shareNote.description,
+        subject: shareNote.title,
+        sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size);
     notifyListeners();
   }
 

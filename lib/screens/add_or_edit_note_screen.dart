@@ -64,6 +64,13 @@ class AddOrEditNoteScreen extends ConsumerWidget {
               },
               icon: Icon(_lockProvider.state ? Icons.lock : Icons.lock_open),
             ),
+            IconButton(
+              onPressed: () {
+                Navigator.of(context)
+                    .pushNamed('note_categories_screen', arguments: _args);
+              },
+              icon: const Icon(Icons.category),
+            ),
           ],
         ),
         body: Form(
@@ -173,45 +180,45 @@ class AddOrEditNoteScreen extends ConsumerWidget {
                         _notesProvider.toggleFavorite(_args);
                       },
                     ),
-                    _fetchingData.when(
-                        data: (data) {
-                          return _categoriesProvider.categories.isEmpty
-                              ? const Center(
-                                  child: Text('No categories .. create one'),
-                                )
-                              : ListView.builder(
-                                  scrollDirection: Axis.vertical,
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount:
-                                      _categoriesProvider.categories.length,
-                                  itemBuilder: (context, index) {
-                                    return CheckboxListTile(
-                                      // check if the note got deleted or not
-                                      value: _isDeleted
-                                          ? false
-                                          : _notesProvider
-                                                  .getNoteById(_args)
-                                                  .category
-                                                  .contains(
-                                                      '${_categoriesProvider.categories[index].name}')
-                                              ? true
-                                              : false,
-                                      title: Text(
-                                          '${_categoriesProvider.categories[index].name}'),
-                                      onChanged: (value) {
-                                        // should add this category to the note or remove it
-                                        _notesProvider.toggleCategory(
-                                            _args,
-                                            _categoriesProvider
-                                                .categories[index]);
-                                      },
-                                    );
-                                  });
-                        },
-                        loading: () =>
-                            const Center(child: CircularProgressIndicator()),
-                        error: (e, st) => Center(child: Text('Error: $e'))),
+                    // _fetchingData.when(
+                    //     data: (data) {
+                    //       return _categoriesProvider.categories.isEmpty
+                    //           ? const Center(
+                    //               child: Text('No categories .. create one'),
+                    //             )
+                    //           : ListView.builder(
+                    //               scrollDirection: Axis.vertical,
+                    //               shrinkWrap: true,
+                    //               physics: const NeverScrollableScrollPhysics(),
+                    //               itemCount:
+                    //                   _categoriesProvider.categories.length,
+                    //               itemBuilder: (context, index) {
+                    //                 return CheckboxListTile(
+                    //                   // check if the note got deleted or not
+                    //                   value: _isDeleted
+                    //                       ? false
+                    //                       : _notesProvider
+                    //                               .getNoteById(_args)
+                    //                               .category
+                    //                               .contains(
+                    //                                   '${_categoriesProvider.categories[index].name}')
+                    //                           ? true
+                    //                           : false,
+                    //                   title: Text(
+                    //                       '${_categoriesProvider.categories[index].name}'),
+                    //                   onChanged: (value) {
+                    //                     // should add this category to the note or remove it
+                    //                     _notesProvider.toggleCategory(
+                    //                         _args,
+                    //                         _categoriesProvider
+                    //                             .categories[index]);
+                    //                   },
+                    //                 );
+                    //               });
+                    //     },
+                    //     loading: () =>
+                    //         const Center(child: CircularProgressIndicator()),
+                    //     error: (e, st) => Center(child: Text('Error: $e'))),
                     // SizedBox(
                     //   height: _size.height * 0.025,
                     // ),
