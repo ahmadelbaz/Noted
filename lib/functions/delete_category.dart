@@ -9,7 +9,6 @@ void deleteCategory(BuildContext context, CategoryProvider _categoriesProvider,
     builder: (ctx) => AlertDialog(
       title: const Text(
         'Delete Category ?',
-        style: TextStyle(color: Colors.black),
       ),
       content: Text(
         'You will delete "${_categoriesProvider.categories[index].name}" Category\nAre you sure ?',

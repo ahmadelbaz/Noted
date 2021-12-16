@@ -14,7 +14,7 @@ class NoteCategoriesScreen extends ConsumerWidget {
     final _fetchingData = watch(categoriesFutureProvider);
     return Scaffold(
       appBar: AppBar(
-        backwardsCompatibility: false,
+        // backwardsCompatibility: false,
         systemOverlayStyle: SystemUiOverlayStyle(
             statusBarColor: Theme.of(context).canvasColor,
             statusBarIconBrightness: Brightness.light),

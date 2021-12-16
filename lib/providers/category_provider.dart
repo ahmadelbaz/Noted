@@ -17,10 +17,10 @@ class CategoryProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void editCategory(Category category, int index) async {
-    _categories[index] = category;
+  void editCategory(String newName, int index) async {
+    _categories[index].name = newName;
     await myDatabase.categoryeDatabase();
-    await myDatabase.update(category);
+    await myDatabase.update(_categories[index]);
     notifyListeners();
   }
 

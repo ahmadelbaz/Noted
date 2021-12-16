@@ -12,6 +12,8 @@ class DrawerList extends StatelessWidget {
     final _size = MediaQuery.of(context).size;
     return Drawer(
       child: ListView(
+        // key to save where we scrolled if we left the tab
+        key: const PageStorageKey<String>('drawerlist'),
         padding: EdgeInsets.zero,
         children: [
           Padding(
@@ -37,24 +39,24 @@ class DrawerList extends StatelessWidget {
           Divider(
             thickness: _size.height * 0.004,
           ),
-          Consumer(
-            builder: (context, watch, child) => ListTile(
-              tileColor: watch(notesChangeNotifierProvider).selected == 'fav'
-                  ? Colors.blueGrey
-                  : Theme.of(context).canvasColor,
-              leading: const Icon(Icons.favorite),
-              title: const Text(
-                'Favorites',
-              ),
-              onTap: () {
-                watch(notesChangeNotifierProvider).showFavNotes();
-                Navigator.of(context).pop();
-              },
-            ),
-          ),
-          Divider(
-            thickness: _size.height * 0.004,
-          ),
+          // Consumer(
+          //   builder: (context, watch, child) => ListTile(
+          //     tileColor: watch(notesChangeNotifierProvider).selected == 'fav'
+          //         ? Colors.blueGrey
+          //         : Theme.of(context).canvasColor,
+          //     leading: const Icon(Icons.favorite),
+          //     title: const Text(
+          //       'Favorites',
+          //     ),
+          //     onTap: () {
+          //       watch(notesChangeNotifierProvider).showFavNotes();
+          //       Navigator.of(context).pop();
+          //     },
+          //   ),
+          // ),
+          // Divider(
+          //   thickness: _size.height * 0.004,
+          // ),
           ListTile(
             leading: const Icon(
               Icons.category,
@@ -65,7 +67,8 @@ class DrawerList extends StatelessWidget {
             onTap: () {
               // it should navigate us to category screen (maybe)
               Navigator.of(context).pop();
-              Navigator.of(context).pushNamed('categories_screen');
+              // Navigator.of(context).pushNamed('categories_screen');
+              DefaultTabController.of(context)?.animateTo(2);
             },
           ),
           Divider(
@@ -87,7 +90,24 @@ class DrawerList extends StatelessWidget {
                   watch(notesChangeNotifierProvider), _fetchingData);
             },
           ),
-
+          Divider(
+            thickness: _size.height * 0.004,
+          ),
+          Consumer(
+            builder: (context, watch, child) => ListTile(
+              tileColor: watch(notesChangeNotifierProvider).selected == 'fav'
+                  ? Colors.blueGrey
+                  : Theme.of(context).canvasColor,
+              leading: const Icon(Icons.delete),
+              title: const Text(
+                'Trash',
+              ),
+              onTap: () {
+                watch(notesChangeNotifierProvider).showFavNotes();
+                Navigator.of(context).pop();
+              },
+            ),
+          ),
           Divider(
             thickness: _size.height * 0.004,
           ),
@@ -101,6 +121,32 @@ class DrawerList extends StatelessWidget {
                 watch(notesChangeNotifierProvider).shareAllNote(context);
               },
             ),
+          ),
+          Divider(
+            thickness: _size.height * 0.004,
+          ),
+          ListTile(
+            leading: const Icon(Icons.settings),
+            title: const Text(
+              'Settings',
+            ),
+            onTap: () {
+              // add new screen for us
+              Navigator.of(context).pushNamed('settings_screen');
+            },
+          ),
+          Divider(
+            thickness: _size.height * 0.004,
+          ),
+          ListTile(
+            leading: const Icon(Icons.person),
+            title: const Text(
+              'About us',
+            ),
+            onTap: () {
+              // add new screen for us
+              Navigator.of(context).pushNamed('about_us_screen');
+            },
           ),
         ],
       ),

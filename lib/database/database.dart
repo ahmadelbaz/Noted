@@ -13,35 +13,41 @@ final dbProvider = ChangeNotifierProvider<MyDatabase>((ref) {
 });
 
 class MyDatabase extends ChangeNotifier {
-  // MyDatabase() {
-  //   noteDatabase();
-  // }
   Future<Database> noteDatabase() async {
+    void _createNotesTablesV1(Batch batch) {
+      batch.execute(
+        "CREATE TABLE notes(id TEXT PRIMARY KEY, title TEXT, body Text, isFavorite INTEGER, datetime INTEGER, category JSON)", //
+      );
+    }
+
     return openDatabase(
       join(await getDatabasesPath(), 'notes_database.db'),
-      onCreate: (db, version) {
-        // Run the CREATE TABLE statement on the database.
-        notifyListeners();
-        return db.execute(
-          "CREATE TABLE notes(id TEXT PRIMARY KEY, title TEXT, body Text, isFavorite INTEGER, datetime INTEGER, category JSON)", //
-        );
+      onCreate: (db, version) async {
+        var batch = db.batch();
+        _createNotesTablesV1(batch);
+        await batch.commit();
       },
       version: 1,
-    ).whenComplete(() {
-      notifyListeners();
-    });
+      onDowngrade: onDatabaseDowngradeDelete,
+    );
   }
 
   Future<Database> categoryeDatabase() async {
+    void _createCatTablesV1(Batch batch) {
+      batch.execute(
+        "CREATE TABLE categories(id TEXT PRIMARY KEY, name TEXT)",
+      );
+    }
+
     return openDatabase(
       join(await getDatabasesPath(), 'categories_database.db'),
-      onCreate: (db, version) {
-        // Run the CREATE TABLE statement on the database.
-        return db.execute(
-          "CREATE TABLE categories(id TEXT PRIMARY KEY, name TEXT)",
-        );
+      onCreate: (db, version) async {
+        var batch = db.batch();
+        _createCatTablesV1(batch);
+        await batch.commit();
       },
       version: 1,
+      onDowngrade: onDatabaseDowngradeDelete,
     );
   }
 

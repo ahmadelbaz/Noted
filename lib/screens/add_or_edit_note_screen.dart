@@ -8,6 +8,7 @@ import 'package:noted/models/note_model.dart';
 import 'package:noted/screens/categories_screen.dart';
 import 'package:noted/screens/notes_list_screen.dart';
 import 'package:uuid/uuid.dart';
+// import 'package:auto_direction/auto_direction.dart';
 
 final lockStateProvider = StateProvider<bool>((ref) => false);
 
@@ -41,6 +42,7 @@ class AddOrEditNoteScreen extends ConsumerWidget {
           _notesProvider.getNoteById(_args).description.isEmpty) {
         _notesProvider.deleteNote(_args);
         _isDeleted = true;
+        ScaffoldMessenger.of(context).removeCurrentSnackBar();
         const snackBar = SnackBar(content: Text('Note is Empty !'));
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
@@ -51,7 +53,7 @@ class AddOrEditNoteScreen extends ConsumerWidget {
       onWillPop: _onWillPop,
       child: Scaffold(
         appBar: AppBar(
-          backwardsCompatibility: false,
+          // backwardsCompatibility: false,
           systemOverlayStyle: SystemUiOverlayStyle(
               statusBarColor: Theme.of(context).canvasColor,
               statusBarIconBrightness: Brightness.light),

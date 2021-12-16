@@ -1,7 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
-
-import 'package:flutter/material.dart';
 
 import 'database_model.dart';
 
@@ -26,12 +23,12 @@ class Note implements DatabaseModel {
     DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(map['datetime']);
     List<String> categoryFromJson =
         List<String>.from(json.decode(map['category']));
-    this.id = map['id'];
-    this.title = map['title'];
-    this.description = map['body'];
-    this.dateTime = dateTime;
-    this.category = categoryFromJson;
-    this.isFavorite = map['isFavorite'] == 0 ? false : true;
+    id = map['id'];
+    title = map['title'];
+    description = map['body'];
+    dateTime = dateTime;
+    category = categoryFromJson;
+    isFavorite = map['isFavorite'] == 0 ? false : true;
   }
 
   @override
@@ -41,7 +38,7 @@ class Note implements DatabaseModel {
 
   @override
   String? getId() {
-    return this.id;
+    return id;
   }
 
   @override
@@ -51,13 +48,13 @@ class Note implements DatabaseModel {
 
   @override
   Map<String, dynamic>? toMap() {
-    int storedDateTime = this.dateTime.millisecondsSinceEpoch;
+    int storedDateTime = dateTime.millisecondsSinceEpoch;
     return {
-      'id': this.id,
-      'title': this.title,
-      'body': this.description,
+      'id': id,
+      'title': title,
+      'body': description,
       'datetime': storedDateTime,
-      'category': json.encode(this.category),
+      'category': json.encode(category),
       'isFavorite': isFavorite ? 1 : 0,
     };
   }

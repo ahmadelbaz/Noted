@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:noted/database/database.dart';
 import 'package:noted/models/category.dart';
 import 'package:noted/models/note_model.dart';
@@ -21,9 +22,12 @@ class NotesProvider extends ChangeNotifier {
   // variable to know which list is selected
   String selected = 'all';
   MyDatabase myDatabase = MyDatabase();
+  // String for search bar
+  String searchText = '';
 
   UnmodifiableListView get showedNotes => UnmodifiableListView(_showedNotes);
   UnmodifiableListView get allNotes => UnmodifiableListView(_allNotes);
+  UnmodifiableListView get favNotes => UnmodifiableListView(_favNotes);
 
   void showAllNotes() {
     _showedNotes = _allNotes;
@@ -35,9 +39,9 @@ class NotesProvider extends ChangeNotifier {
   void showFavNotes() {
     _favNotes =
         _allNotes.where((element) => element.isFavorite == true).toList();
-    _showedNotes = _favNotes;
-    selected = 'fav';
-    notifyListeners();
+    // _showedNotes = _favNotes;
+    // selected = 'fav';
+    // notifyListeners();
   }
 
   // show specific category which user selected
@@ -54,33 +58,40 @@ class NotesProvider extends ChangeNotifier {
   void showCurrent() {
     if (selected == 'all') {
       showAllNotes();
-    } else if (selected == 'fav') {
-      showFavNotes();
     } else {
       showCategoryNotes(selected);
     }
   }
 
-  void search(String value) {
-    if (selected == 'fav') {
+  void search(String value, bool isFav, BuildContext context) {
+    log('$isFav');
+    if (isFav) {
       _searchNotes = _favNotes
           .where((element) =>
-              element.title.contains(value) ||
-              element.description.contains(value))
+              element.title.toUpperCase().contains(value.toUpperCase()) ||
+              element.description.toUpperCase().contains(value.toUpperCase()))
           .toList();
-      _showedNotes = _searchNotes;
+      // _favNotes = _searchNotes;
+      // log('fav now : ${_favNotes.length}');
+      if (_searchNotes.isEmpty) {
+        final snackBar = SnackBar(content: Text('No result'));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      } else {
+        // do something to show what user search about
+      }
     } else if (selected == 'all') {
       _searchNotes = _allNotes
           .where((element) =>
-              element.title.contains(value) ||
-              element.description.contains(value))
+              element.title.toUpperCase().contains(value.toUpperCase()) ||
+              element.description.toUpperCase().contains(value.toUpperCase()))
           .toList();
       _showedNotes = _searchNotes;
+      log('showed now : ${_showedNotes.length}');
     } else {
       _searchNotes = _catNotes
           .where((element) =>
-              element.title.contains(value) ||
-              element.description.contains(value))
+              element.title.toUpperCase().contains(value.toUpperCase()) ||
+              element.description.contains(value.toUpperCase()))
           .toList();
       _showedNotes = _searchNotes;
     }
@@ -143,10 +154,11 @@ class NotesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void deleteAllNotes() {
-    _allNotes.clear();
-    notifyListeners();
-  }
+  // void deleteAllNotes() async{
+  //   _allNotes.clear();
+  //   await myDatabase.noteDatabase();
+  //   notifyListeners();
+  // }
 
   void shareNote(BuildContext context, String id) {
     Note shareNote = _allNotes.firstWhere((element) => element.id == id);
